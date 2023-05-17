@@ -29,8 +29,4 @@ export interface LoggedUser {
   token: string;
 }
 
-export interface ErrType {
-  code: number;
-  message: string;
-  status: string;
-}
+export type ErrType = string[];

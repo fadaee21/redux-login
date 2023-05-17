@@ -23,9 +23,7 @@ export const login = createAsyncThunk(
       return await authService.login(user); //this is returning payload
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        console.log(error);
-        const errObj = error?.message;
-        return thunkApi.rejectWithValue(errObj); //pass the message as action value
+        return thunkApi.rejectWithValue(error.response?.data); //pass the message as action value
       }
     }
   }
@@ -38,9 +36,7 @@ export const logout = createAsyncThunk(
       return await authService.logout(token); //this is returning payload
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        console.log(error);
-        const errObj = error?.message;
-        return thunkApi.rejectWithValue(errObj); //pass the message as action value
+        return thunkApi.rejectWithValue(error); //pass the message as action value
       }
     }
   }
@@ -78,12 +74,18 @@ export const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.isError = false;
+        state.err = [];
         state.user = action.payload;
       })
       .addCase(login.rejected, (state, action: PayloadAction<any>) => {
+        console.log(action.payload);
         state.isLoading = false;
+        state.isSuccess = false;
         state.isError = true;
-        state.err = action.payload;
+        state.err =
+          (action.payload.user && action.payload.user[0]) ||
+          action.payload.message;
         state.user = null;
       })
 
