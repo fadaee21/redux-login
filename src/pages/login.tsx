@@ -13,7 +13,7 @@ const Login = () => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
+  //!add async-await because depended on response then do sth different
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!password || !email) {
@@ -23,8 +23,8 @@ const Login = () => {
     await dispatch(login({ email, password }));
     const { auth } = store.getState();
     const { err, isError, isSuccess } = auth;
-    //you must getState to get updated state after login
-    // otherwise you will have old state
+    //!you must getState to have updated state after login
+    //!otherwise you will have old state
     if (isSuccess) {
       navigate("/cart");
       toast.success("logging in...");
